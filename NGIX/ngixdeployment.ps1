@@ -21,7 +21,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # ---------------------------
 # Configuration Variables
 # ---------------------------
-$SiteDomain = "docs.secureedge.local"           # Internal domain name
+$SiteDomain = "SecureEdge.Inc"           # Internal domain name
 $NginxRoot = "C:\nginx"                         # Nginx installation directory
 $WebRoot = "$NginxRoot\html"                    # Directory to host the website files
 $IndexSource = "$PSScriptRoot\index.html"       # Location of the provided HTML file
