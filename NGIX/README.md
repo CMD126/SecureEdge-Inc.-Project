@@ -24,25 +24,28 @@ The script includes a configuration section at the top, allowing you to customiz
 
 | Variable          | Default Value                        | Description                                          |
 |-------------------|--------------------------------------|------------------------------------------------------|
-| `$SiteDomain`     | `"docs.secureedge.local"`            | The internal domain name for the documentation portal. |
+| `$SiteDomain`     | `"SecureEdge.Inc"`                   | The internal domain name for the documentation portal. |
 | `$NginxRoot`      | `"C:\nginx"`                         | The directory where Nginx will be installed.         |
 | `$WebRoot`        | `"$NginxRoot\html"`                  | The directory where the website files will be hosted.  |
 | `$IndexSource`    | `"$PSScriptRoot\index.html"`         | The location of the `index.html` file to be copied.  |
 | `$NginxConf`      | `"$NginxRoot\conf\nginx.conf"`       | The path to the Nginx configuration file.            |
-| `$NginxUrl`       | `"https://nginx.org/download/nginx-1.26.2.zip"` | The URL for the Nginx Windows package.             |
+| `$NginxVersion`   | `"1.25.3"`                           | The version of Nginx to be installed.                |
+| `$NginxUrl`       | `"https://nginx.org/download/nginx-$($NginxVersion).zip"` | The URL for the Nginx Windows package.             |
 | `$ZipPath`        | `"$env:TEMP\nginx.zip"`              | The temporary path for the downloaded zip file.      |
 
 ## Usage
 
-1.  **Place `index.html`:** Ensure that you have an `index.html` file in the same directory as the `ngixdeployment.ps1` script.
-2.  **Run the Script:** Open a PowerShell terminal, navigate to the directory containing the script, and execute it:
+1.  **Set Execution Policy:** Open a PowerShell terminal as an Administrator and run the following command to allow script execution for the current session:
+    ```powershell
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+    ```
+2.  **Place `index.html`:** Ensure that you have an `index.html` file in the same directory as the `ngixdeployment.ps1` script.
+3.  **Run the Script:** In the same PowerShell terminal, navigate to the directory containing the script, and execute it:
 
     ```powershell
     .\ngixdeployment.ps1
     ```
 
-3.  **Administrator Privileges:** The script will require administrator privileges to modify the `hosts` file and install software.
-
 ## Verification
 
-After the script has completed, you can verify the deployment by opening a web browser and navigating to the site domain you configured (by default, `http://docs.secureedge.local`). If the deployment was successful, you will see the content of your `index.html` file.
+After the script has completed, you can verify the deployment by opening a web browser and navigating to the site domain you configured (by default, `http://SecureEdge.Inc`). If the deployment was successful, you will see the content of your `index.html` file.
