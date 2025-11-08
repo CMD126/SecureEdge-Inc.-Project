@@ -26,7 +26,8 @@ $NginxRoot = "C:\nginx"                         # Nginx installation directory
 $WebRoot = "$NginxRoot\html"                    # Directory to host the website files
 $IndexSource = "$PSScriptRoot\index.html"       # Location of the provided HTML file
 $NginxConf = "$NginxRoot\conf\nginx.conf"       # Path to Nginx configuration file
-$NginxUrl = "https://nginx.org/download/nginx-1.26.2.zip"  # Official Nginx Windows package
+$NginxVersion = "1.25.3"                        # Nginx version to install
+$NginxUrl = "https://nginx.org/download/nginx-$($NginxVersion).zip"  # Official Nginx Windows package
 $ZipPath = "$env:TEMP\nginx.zip"                # Temporary path for the downloaded zip file
 
 Write-Host "Checking Nginx installation status..." -ForegroundColor Cyan
@@ -37,6 +38,9 @@ Write-Host "Checking Nginx installation status..." -ForegroundColor Cyan
 if (!(Test-Path "$NginxRoot\nginx.exe")) {
     Write-Host "Nginx not found. Downloading and installing..." -ForegroundColor Yellow
 
+    # Force TLS 1.2 for secure downloads
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    
     # Download the Nginx package
     Invoke-WebRequest -Uri $NginxUrl -OutFile $ZipPath
 
@@ -45,7 +49,7 @@ if (!(Test-Path "$NginxRoot\nginx.exe")) {
 
     # Detect the extracted folder (e.g., nginx-1.26.2) and rename it to 'nginx'
     $Extracted = Get-ChildItem "C:\" | Where-Object { $_.Name -like "nginx-*" } | Select-Object -First 1
-    Rename-Item -Path "C:\$($Extracted.Name)" -NewName "nginx"
+    Rename-Item -Path "C:\$($Extracted.Name)" -NewName "nginx" -Force
 
     Write-Host "Nginx successfully installed at C:\nginx" -ForegroundColor Green
 } else {
@@ -76,6 +80,9 @@ if (Test-Path $IndexSource) {
 # ---------------------------
 Write-Host "Creating Nginx configuration file..." -ForegroundColor Cyan
 
+# Nginx configuration requires forward slashes for paths
+$NginxWebRoot = $WebRoot.Replace('\', '/')
+
 $Config = @"
 worker_processes  1;
 
@@ -92,7 +99,7 @@ http {
     server {
         listen       80;
         server_name  $SiteDomain;
-        root         $WebRoot;
+        root         "$NginxWebRoot";
         index        index.html;
 
         access_log  logs/access.log;
@@ -105,7 +112,7 @@ http {
 }
 "@
 
-Set-Content -Path $NginxConf -Value $Config -Encoding UTF8
+Set-Content -Path $NginxConf -Value $Config -Encoding ASCII
 Write-Host "Nginx configuration file created successfully." -ForegroundColor Green
 
 # ---------------------------
@@ -113,6 +120,13 @@ Write-Host "Nginx configuration file created successfully." -ForegroundColor Gre
 # ---------------------------
 $HostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
 $HostsEntry = "127.0.0.1`t$SiteDomain"
+
+# Ensure the hosts file is not read-only
+try {
+    attrib -r $HostsPath
+} catch {
+    Write-Host "Could not make the hosts file writable. Manual intervention may be required." -ForegroundColor Red
+}
 
 if (-not (Select-String -Path $HostsPath -Pattern $SiteDomain -Quiet)) {
     Add-Content -Path $HostsPath -Value $HostsEntry
@@ -133,8 +147,20 @@ if ($nginxProcesses) {
 }
 
 # ---------------------------
-# Step 7: Start Nginx
+# Step 7: Verify Nginx Configuration and Start Nginx
 # ---------------------------
+Write-Host "Verifying Nginx configuration..." -ForegroundColor Cyan
+Push-Location $NginxRoot
+$TestResult = (.\nginx.exe -t 2>&1)
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Nginx configuration test failed:" -ForegroundColor Red
+    Write-Host $TestResult -ForegroundColor Red
+    Pop-Location
+    exit 1
+}
+Write-Host "Nginx configuration test successful." -ForegroundColor Green
+Pop-Location
+
 Write-Host "Starting Nginx..." -ForegroundColor Cyan
 # Change directory to ensure logs are written to the correct relative path
 Push-Location $NginxRoot
