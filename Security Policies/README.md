@@ -2,7 +2,7 @@
 ## Password Policies: Strong password policies will be configured to enforce strong authentication measures.
 
 
-#### Password Policy: Users will have to set a password on first log in, users will have a 30 day period for each password, different from the previous 8 passwords (when applied) and use special characters to enhance security.
+#### A) Password Policy: Users will have to set a password on first log in, users will have a 30 day period for each password, different from the previous 8 passwords (when applied) and use special characters to enhance security.
 
   1) Enforce password history: last 8 passwords
   2) Maximum password age: 30 days
@@ -10,7 +10,7 @@
   4) Minimum password length: 10 characters
   5) Password must meet complexity requirement
 
-#### Lockout Period: Lockout Period forces users to wait in case of wrong password combinations. This enhances security and mitigates possible brute force and dictionary attacks.
+#### B) Lockout Period: Lockout Period forces users to wait in case of wrong password combinations. This enhances security and mitigates possible brute force and dictionary attacks.
 
 1) Account lockout duration: 20 minutes
 2) Account lockout threshold: 5 invalid logon attempts
