@@ -1,6 +1,6 @@
 # All documents and references
 
-### Final pdf available
+### Final pdf document
 
 ### References and Documents:
 
