@@ -1,51 +1,71 @@
-# SecureEdge Inc. - Internal Documentation Portal Deployment Script
+# SecureEdge Inc. - Nginx Deployment Automation
 
-## Synopsis
+## 1. Synopsis
 
-This PowerShell script automates the deployment of an internal documentation portal using Nginx on a Windows environment. It is designed to be a one-stop solution for setting up a local web server, ensuring that all necessary dependencies are handled and configurations are applied seamlessly. The script checks for an existing Nginx installation, downloads and installs it if necessary, and configures it to serve a local website.
+This PowerShell script provides a fully automated solution for deploying an Nginx web server on a Windows environment. Designed for reliability, it handles everything from dependency checks and installation to final configuration and service verification. The primary use case is to set up a secure and lightweight internal documentation portal, but it can be adapted for any local web hosting needs.
 
-## Features
+## 2. Key Features
 
-- **Automated Nginx Installation:** The script detects if Nginx is installed and, if not, downloads and extracts the latest stable version from the official Nginx website.
-- **Directory Structure Creation:** Automatically creates the required webroot directory for hosting the documentation files.
-- **Customizable Configuration:** Key settings such as the site domain, installation paths, and Nginx configuration are managed through easily accessible variables.
-- **Local DNS Resolution:** The script adds an entry to the local `hosts` file, allowing you to access the portal using a custom domain name (`docs.secureedge.local` by default).
-- **Service Verification:** After starting the Nginx service, the script verifies that the process is running to confirm a successful deployment.
+- **Administrator Privileges Check:** Ensures the script is run with the required permissions to modify system files and install services.
+- **Automated Nginx Installation:** Detects if Nginx is already installed. If not, it downloads the specified version from the official repository, extracts it, and renames the directory to a clean `C:\nginx`.
+- **TLS 1.2 Enforcement:** Forces TLS 1.2 for secure file downloads, aligning with modern security best practices.
+- **Dynamic Configuration:** Generates a custom `nginx.conf` file based on predefined PowerShell variables. File paths are automatically formatted with forward slashes for cross-platform compatibility.
+- **Local DNS Resolution:** Automatically adds an entry to the `hosts` file to map a custom domain (e.g., `securedge.inc`) to `127.0.0.1`, simplifying local access.
+- **Configuration Validation:** Before starting the server, it runs `nginx.exe -t` to validate the syntax of the generated configuration file, preventing start-up failures.
+- **Process Management:** Gracefully stops any existing Nginx processes before attempting to start a new instance to avoid port conflicts.
+- **Automated Verification:** After deployment, it confirms that the Nginx process is running and provides the direct URL for immediate access.
 
-## Prerequisites
+## 3. Prerequisites
 
-- **Windows Operating System:** This script is designed for Windows and uses PowerShell for execution.
-- **Execution Policy:** You may need to set the PowerShell execution policy to allow script execution. You can do this by running `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in your PowerShell session.
-- **`index.html` File:** An `index.html` file must be present in the same directory as the script.
+- **Operating System:** Windows Server or a modern Windows Desktop OS.
+- **Administrator Privileges:** The script must be executed from a PowerShell session running as an Administrator.
+- **`index.html` File:** A valid `index.html` file must be located in the same directory as the `ngixdeployment.ps1` script.
 
-## Configuration
+## 4. Configuration
 
-The script includes a configuration section at the top, allowing you to customize the deployment to your needs. The following variables are available:
+The script's behavior can be customized by modifying the variables at the top of the file.
 
-| Variable          | Default Value                        | Description                                          |
-|-------------------|--------------------------------------|------------------------------------------------------|
-| `$SiteDomain`     | `"SecureEdge.Inc"`                   | The internal domain name for the documentation portal. |
-| `$NginxRoot`      | `"C:\nginx"`                         | The directory where Nginx will be installed.         |
-| `$WebRoot`        | `"$NginxRoot\html"`                  | The directory where the website files will be hosted.  |
-| `$IndexSource`    | `"$PSScriptRoot\index.html"`         | The location of the `index.html` file to be copied.  |
-| `$NginxConf`      | `"$NginxRoot\conf\nginx.conf"`       | The path to the Nginx configuration file.            |
-| `$NginxVersion`   | `"1.25.3"`                           | The version of Nginx to be installed.                |
-| `$NginxUrl`       | `"https://nginx.org/download/nginx-$($NginxVersion).zip"` | The URL for the Nginx Windows package.             |
-| `$ZipPath`        | `"$env:TEMP\nginx.zip"`              | The temporary path for the downloaded zip file.      |
+| Variable          | Default Value                                      | Description                                                                 |
+|-------------------|----------------------------------------------------|-----------------------------------------------------------------------------|
+| `$SiteDomain`     | `"securedge.inc"`                                  | The local domain name for the documentation portal.                         |
+| `$NginxRoot`      | `"C:\nginx"`                                       | The installation directory for Nginx.                                       |
+| `$WebRoot`        | `"$NginxRoot\html"`                                | The root directory where website content (e.g., `index.html`) will be served. |
+| `$IndexSource`    | `"$PSScriptRoot\index.html"`                       | The path to the source `index.html` file.                                   |
+| `$NginxConf`      | `"$NginxRoot\conf\nginx.conf"`                     | The full path to the Nginx configuration file to be generated.              |
+| `$NginxVersion`   | `"1.25.3"`                                         | The specific version of Nginx to download.                                  |
+| `$NginxUrl`       | `"https://nginx.org/download/nginx-1.25.3.zip"`    | The download URL for the Nginx package. This is built using `$NginxVersion`.|
+| `$ZipPath`        | `"$env:TEMP\nginx.zip"`                            | A temporary location for storing the downloaded Nginx zip file.             |
 
-## Usage
+## 5. How to Use
 
-1.  **Set Execution Policy:** Open a PowerShell terminal as an Administrator and run the following command to allow script execution for the current session:
+1.  **Prepare `index.html`:** Ensure your main `index.html` file is in the same directory as the deployment script.
+2.  **Open PowerShell as Administrator:** Right-click the PowerShell icon and select "Run as Administrator."
+3.  **Set Execution Policy (If Required):** To allow the script to run, execute the following command:
     ```powershell
     Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
     ```
-2.  **Place `index.html`:** Ensure that you have an `index.html` file in the same directory as the `ngixdeployment.ps1` script.
-3.  **Run the Script:** In the same PowerShell terminal, navigate to the directory containing the script, and execute it:
-
+4.  **Run the Script:** Navigate to the script's directory and execute it:
     ```powershell
     .\ngixdeployment.ps1
     ```
 
-## Verification
+## 6. Script Breakdown
 
-After the script has completed, you can verify the deployment by opening a web browser and navigating to the site domain you configured (by default, `http://SecureEdge.Inc`). If the deployment was successful, you will see the content of your `index.html` file.
+The script executes the following steps in order:
+
+1.  **Check for Administrator Privileges:** Exits if not running as an admin.
+2.  **Verify Nginx Installation:** Checks for `nginx.exe`. If not found, it downloads and installs Nginx.
+3.  **Prepare Directories:** Creates the `html` and `logs` directories if they don't exist.
+4.  **Copy `index.html`:** Copies the site's main page into the webroot.
+5.  **Generate `nginx.conf`:** Creates a new Nginx configuration file with the correct paths and server name.
+6.  **Add Local DNS Entry:** Modifies the Windows `hosts` file to resolve the site domain locally.
+7.  **Stop Old Nginx Processes:** Ensures a clean start by stopping any running `nginx.exe` instances.
+8.  **Validate and Start Nginx:** Tests the configuration and then starts the Nginx service.
+9.  **Verify Service Status:** Confirms the `nginx` process is running and prints a success message.
+
+## 7. Verification
+
+After the script completes successfully, you can verify the deployment by:
+- **Checking the Output:** The final message in the PowerShell terminal will confirm success and provide the URL.
+- **Opening a Web Browser:** Navigate to the URL specified (e.g., `http://securedge.inc`). Your `index.html` page should be displayed.
+- **Checking Nginx Logs:** If the site doesn't load, check the `access.log` and `error.log` files in `C:\nginx\logs` for more information.
