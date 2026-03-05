@@ -39,8 +39,22 @@ if (!(Test-Path "$NginxRoot\nginx.exe")) {
     Write-Host "Nginx not found. Downloading version $NginxVersion..." -ForegroundColor Yellow
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    Invoke-WebRequest -Uri $NginxUrl -OutFile $ZipPath
-    Expand-Archive -Path $ZipPath -DestinationPath "C:\" -Force
+    try {
+        Invoke-WebRequest -Uri $NginxUrl -OutFile $ZipPath -ErrorAction Stop
+    } catch {
+        Write-Host "Failed to download Nginx: $_" -ForegroundColor Red
+        exit 1
+    }
+    try {
+        Expand-Archive -Path $ZipPath -DestinationPath "C:\" -Force -ErrorAction Stop
+    } catch {
+        Write-Host "Failed to extract Nginx archive: $_" -ForegroundColor Red
+        Remove-Item $ZipPath -Force -ErrorAction SilentlyContinue
+        exit 1
+    }
+
+    # Clean up the downloaded zip
+    Remove-Item $ZipPath -Force -ErrorAction SilentlyContinue
 
     $Extracted = Get-ChildItem "C:\" | Where-Object { $_.Name -like "nginx-*" } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if ($Extracted -and (Test-Path "C:\$($Extracted.Name)\nginx.exe")) {
@@ -114,7 +128,7 @@ Write-Host "Configuration file created at $NginxConf" -ForegroundColor Green
 # ---------------------------
 $HostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
 $HostsEntry = "127.0.0.1`t$SiteDomain"
-attrib -r $HostsPath -ErrorAction SilentlyContinue
+attrib -r $HostsPath 2>$null
 if (-not (Select-String -Path $HostsPath -Pattern $SiteDomain -Quiet)) {
     Add-Content -Path $HostsPath -Value $HostsEntry
     Write-Host "Added local hosts entry for $SiteDomain" -ForegroundColor Yellow
