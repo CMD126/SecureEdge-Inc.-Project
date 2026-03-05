@@ -23,7 +23,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 try:
     import psutil
     _HAS_PSUTIL = True
-except Exception:
+except ImportError:
     _HAS_PSUTIL = False
 
 class NetworkTool:
@@ -147,9 +147,15 @@ class NetworkTool:
 
         # Get network I/O counters before waiting.
         before = psutil.net_io_counters()
+        if before is None:
+            print("No network interfaces found.")
+            return 0, 0
         time.sleep(duration)
         # Get network I/O counters after waiting.
         after = psutil.net_io_counters()
+        if after is None:
+            print("No network interfaces found.")
+            return 0, 0
         # Calculate the difference to find the traffic during the interval.
         sent = after.bytes_sent - before.bytes_sent
         recv = after.bytes_recv - before.bytes_recv
@@ -234,8 +240,8 @@ class NetworkTool:
             # Get the port range from the user.
             start = int(input("Start port (e.g. 1): ").strip())
             end = int(input("End port (e.g. 1024): ").strip())
-            if start < 0 or end < start:
-                print("Invalid port range.")
+            if start < 1 or end < start or end > 65535:
+                print("Invalid port range. Ports must be between 1 and 65535.")
                 return
         except ValueError:
             print("Port numbers must be integers.")
