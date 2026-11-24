@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-labelledby="t">
+  <title id="t">SecureEdge Inc: enterprise infrastructure lab</title>
+  <defs>
+    <pattern id="p" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#2A3550" stroke-opacity=".45"/></pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFB454" stop-opacity=".55"/><stop offset="1" stop-color="#FFB454" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="1" y="1" width="1198" height="298" rx="22" fill="#0A0E1A" stroke="#2A3550" stroke-width="2"/>
+  <rect x="1" y="1" width="1198" height="298" rx="22" fill="url(#p)"/>
+  <text x="60" y="128" font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-size="66" font-weight="600" letter-spacing="-1"><tspan fill="#E6EAF2">SecureEdge</tspan><tspan fill="#FFB454"> Inc.</tspan></text>
+  <text x="62" y="174" font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-size="26" fill="#8FA3C7">Enterprise infrastructure lab</text>
+  <rect x="62" y="232" width="179" height="34" rx="17" fill="#121829" stroke="#2A3550"/>
+  <text x="152" y="254" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#8FA3C7">Active Directory</text>
+  <rect x="253" y="232" width="118" height="34" rx="17" fill="#121829" stroke="#2A3550"/>
+  <text x="312" y="254" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#8FA3C7">FreeRADIUS</text>
+  <rect x="383" y="232" width="118" height="34" rx="17" fill="#121829" stroke="#2A3550"/>
+  <text x="442" y="254" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#8FA3C7">PowerShell</text>
+  <rect x="513" y="232" width="67" height="34" rx="17" fill="#121829" stroke="#2A3550"/>
+  <text x="547" y="254" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#8FA3C7">Nginx</text>
+  <rect x="620" y="80" width="80" height="36" rx="6" fill="#121829" stroke="#2A3550" stroke-width="2"/>
+  <path d="M632 92 H672 M632 104 H656" stroke="#8FA3C7" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M700 98 L755 150" stroke="#8FA3C7" stroke-opacity=".5" stroke-width="1.8"/>
+  <rect x="620" y="130" width="80" height="36" rx="6" fill="#121829" stroke="#2A3550" stroke-width="2"/>
+  <path d="M632 142 H672 M632 154 H656" stroke="#8FA3C7" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M700 148 L755 150" stroke="#8FA3C7" stroke-opacity=".5" stroke-width="1.8"/>
+  <rect x="620" y="180" width="80" height="36" rx="6" fill="#121829" stroke="#2A3550" stroke-width="2"/>
+  <path d="M632 192 H672 M632 204 H656" stroke="#8FA3C7" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M700 198 L755 150" stroke="#8FA3C7" stroke-opacity=".5" stroke-width="1.8"/>
+  <text x="660" y="258" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="13" fill="#8FA3C7">workstations</text>
+  <circle cx="805.0" cy="150" r="95" fill="url(#glow)" fill-opacity=".5"/>
+  <rect x="755" y="105.0" width="100" height="90" rx="12" fill="#121829" stroke="#FFB454" stroke-width="2"/>
+  <text x="805.0" y="145.0" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#FFB454">pfSense</text>
+  <text x="805.0" y="165.0" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#FFB454">gate</text>
+  <text x="805.0" y="258" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="13" fill="#8FA3C7">captive portal</text>
+  <rect x="910" y="105.0" width="100" height="90" rx="12" fill="#121829" stroke="#2A3550" stroke-width="2"/>
+  <text x="960.0" y="155.0" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#E6EAF2">FreeRADIUS</text>
+  <text x="960.0" y="258" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="13" fill="#8FA3C7">AAA server</text>
+  <rect x="1065" y="105.0" width="100" height="90" rx="12" fill="#121829" stroke="#2A3550" stroke-width="2"/>
+  <text x="1115.0" y="145.0" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#E6EAF2">Active</text>
+  <text x="1115.0" y="165.0" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="15" fill="#E6EAF2">Directory</text>
+  <text x="1115.0" y="258" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="13" fill="#8FA3C7">identity store</text>
+  <path d="M859 150 H906" stroke="#8FA3C7" stroke-width="2"/>
+  <path d="M900 145 L907 150 L900 155" fill="none" stroke="#8FA3C7" stroke-width="2"/>
+  <text x="882.5" y="140" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="12" fill="#8FA3C7">RADIUS</text>
+  <path d="M1014 150 H1061" stroke="#8FA3C7" stroke-width="2"/>
+  <path d="M1055 145 L1062 150 L1055 155" fill="none" stroke="#8FA3C7" stroke-width="2"/>
+  <text x="1037.5" y="140" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="12" fill="#8FA3C7">LDAP</text>
+  <text x="1115" y="96" text-anchor="middle" font-family="'JetBrains Mono', Consolas, ui-monospace, monospace" font-size="13" fill="#8FA3C7">secureedge.Inc</text>
+</svg>
